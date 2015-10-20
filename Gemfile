@@ -24,6 +24,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'sidekiq'
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'bson_ext'
+gem 'mechanize'
+gem 'nokogiri'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
