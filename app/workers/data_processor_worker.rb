@@ -25,18 +25,22 @@ class DataProcessorWorker
         end
 
         total_sale = 0.0
+        total_sale_counter = 0
         total_rent = 0.0
+        total_rent_counter = 0
         bucket.buildings.each { | building |
             if !building.median_sale_price.nil?
                 total_sale += building.median_sale_price
+                total_sale_counter += 1;
             end
             if !building.median_rent_price.nil?
                 total_rent += building.median_rent_price
+                total_rent_counter += 1;
             end
         }
 
-        bucket.median_sale_price = total_sale / bucket.buildings.length
-        bucket.median_rent_price = total_rent / bucket.buildings.length
+        bucket.median_sale_price = total_sale / total_sale_counter
+        bucket.median_rent_price = total_rent / total_rent_counter
 
         existing = Bucket.where({bucket_id: bucket.bucket_id}).first
         if !existing.nil? 
