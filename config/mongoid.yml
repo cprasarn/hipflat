@@ -142,4 +142,4 @@ production:
       options:
         read:
           mode: primary
-        max_pool_size: 1
+        max_pool_size: 10
