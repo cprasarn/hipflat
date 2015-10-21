@@ -10,7 +10,7 @@ class DataProcessorWorker
         bucket = buckets[index]
         if bucket.nil?
             bucket = Bucket.new
-            bucket.bucket_id = index + 1
+            bucket.bucket_id = index
             bucket.buildings = []
         end
         
