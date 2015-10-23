@@ -22,7 +22,7 @@ class DataScraperWorker
           else
             field_value = case field_name
               when "median_sale_price", "median_rent_price", "distance_to_the_nearest_public_transit_station"
-                value.to_f
+                value.delete(',').to_f
               else
                 value
             end

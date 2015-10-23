@@ -24,29 +24,31 @@ class DataProcessorWorker
             next
         end
 
-        total_sale = 0.0
-        total_sale_counter = 0
-        total_rent = 0.0
-        total_rent_counter = 0
+        median_sale = []
+        median_rent = []
         bucket.buildings.each { | building |
             if !building.median_sale_price.nil?
-                total_sale += building.median_sale_price
-                total_sale_counter += 1;
+                median_sale << building.median_sale_price
             end
             if !building.median_rent_price.nil?
-                total_rent += building.median_rent_price
-                total_rent_counter += 1;
+                median_rent << building.median_rent_price
             end
         }
 
-        bucket.median_sale_price = total_sale / total_sale_counter
-        bucket.median_rent_price = total_rent / total_rent_counter
+        median_sale.sort! { |a,b| a <=> b}
+        sale_middle = median_sale.length / 2
+        median_rent.sort! { |a,b| a <=> b}
+        rent_middle = median_rent.length / 2
+
+        bucket.median_sale_price = (0 == median_sale.length % 2) ? (median_sale[sale_middle - 1].to_f + median_sale[sale_middle].to_f) / 2 : median_sale[sale_middle]
+        bucket.median_rent_price = (0 == median_rent.length % 2) ? (median_rent[rent_middle - 1].to_f + median_rent[rent_middle].to_f) / 2 : median_rent[rent_middle]
 
         existing = Bucket.where({bucket_id: bucket.bucket_id}).first
         if !existing.nil? 
             existing.median_sale_price = bucket.median_sale_price
             existing.median_rent_price = bucket.median_rent_price
             existing.buildings = bucket.buildings
+            existing.save
         else
             bucket.save
         end
