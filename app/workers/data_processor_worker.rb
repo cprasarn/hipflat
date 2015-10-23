@@ -40,8 +40,20 @@ class DataProcessorWorker
         median_rent.sort! { |a,b| a <=> b}
         rent_middle = median_rent.length / 2
 
-        bucket.median_sale_price = (0 == median_sale.length % 2) ? (median_sale[sale_middle - 1].to_f + median_sale[sale_middle].to_f) / 2 : median_sale[sale_middle]
-        bucket.median_rent_price = (0 == median_rent.length % 2) ? (median_rent[rent_middle - 1].to_f + median_rent[rent_middle].to_f) / 2 : median_rent[rent_middle]
+        if 0 < median_sale.length
+            if 0 == median_sale.length % 2
+               bucket.median_sale_price = (median_sale[sale_middle - 1].to_f + median_sale[sale_middle].to_f) / 2 
+            else
+               bucket.median_sale_price = median_sale[sale_middle]
+            end
+        end
+        if 0 < median_rent.length
+            if 0 == median_rent.length % 2
+               bucket.median_rent_price = (median_rent[rent_middle - 1].to_f + median_rent[rent_middle].to_f) / 2 
+            else
+               bucket.median_rent_price = median_rent[rent_middle]
+            end
+        end
 
         existing = Bucket.where({bucket_id: bucket.bucket_id}).first
         if !existing.nil? 
